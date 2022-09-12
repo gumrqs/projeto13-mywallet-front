@@ -1,44 +1,31 @@
 
-import dayjs from 'dayjs';
 import { useNavigate } from "react-router-dom";
 import UserContext from "../../Contexts/UserContext";
 import { useContext, useEffect, useState } from "react";
 import styled from 'styled-components';
 import { homeUser } from '../../service/api';
-import { Link } from 'react-router-dom';
 export default function Home(){
 
-    const { user, setUser } = useContext(UserContext);
-    const[rendervalues, setRenderValues] = useState(<></>)
+    const { users, setUsers } = useContext(UserContext);
     const navigate = useNavigate();
     const [updatevalues, setUpdateValues] = useState(true);
     const [isEmptyTransactions, setIsEmptyTransactions] = useState(true);
     const [valuesUser, setValueUser] = useState([]);
 
 
-
-    
-    console.log(valuesUser, 'DADOSSSS');
-
     useEffect(()=>{
-        homeUser(user.token)
+        homeUser(users.token)
         
             .then((resposta) => {
                setValueUser(resposta.data);
                 if(resposta.data.length===0){
+                    console.log(resposta.data, 'GET DA RESPOSTA')
                     setIsEmptyTransactions(true)
                 } else{
                     setIsEmptyTransactions(false)
                 }   
                 
             })
-            .catch((err) => {
-                console.error(err);
-                if(err.status !== 200){
-                    alert("Cadastro errado ou já existente")
-                } 
-    
-            });
         
         },[updatevalues])
 
@@ -50,7 +37,7 @@ export default function Home(){
             ?
                 <>
                     <Topo>
-                        <Text> Olá, {user.name}</Text>
+                        <Text> Olá, {users.name}</Text>
                         <Text2> <ion-icon name="log-out-outline"></ion-icon></Text2>
                     </Topo>
                     <Movements>
@@ -74,8 +61,8 @@ export default function Home(){
             :
                 <>
                     <Topo>
-                        <Text> Olá, {user.name}</Text>
-                        <Text2> <ion-icon name="log-out-outline"></ion-icon></Text2>
+                        <Text> Olá, {users.name}</Text>
+                        <Text2> <ion-icon onClick={()=> navigate('/')}name="log-out-outline"></ion-icon></Text2>
                     </Topo>
                     <Movements>
                         {valuesUser.map((value, index)=>{
@@ -94,7 +81,7 @@ export default function Home(){
                           );  
                         })}
                     </Movements>
-                    <Footer>
+                    
                         
                         <Input onClick={()=> navigate('/input')}>
                             <Text2><ion-icon name="add-circle-outline"></ion-icon></Text2>
@@ -106,7 +93,7 @@ export default function Home(){
                             <TextIn> Nova Saída</TextIn>
                         </Output>
                    
-                    </Footer>
+                    
                 </>
            }
     </Body>
@@ -232,6 +219,8 @@ color: #868686;
 display: flex;
 flex-wrap: wrap;
 justify-content: space-between ;
-align-items: center ;
+
 border-radius: 5px;
+height: 445px;
+overflow:auto ;
 `

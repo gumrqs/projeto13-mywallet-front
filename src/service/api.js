@@ -12,14 +12,17 @@ export function registerUser(body){
     const promise = axios.post(`${URL}/sign-up`, body);
     return promise;
 }
+
 export function inputUser(body,token){
     const promise = axios.post(`${URL}/input`, body, createHeaders(token));
     return promise;
 }
+
 export function outputUser(body,token){
     const promise = axios.post(`${URL}/output`, body, createHeaders(token));
     return promise;
 }
+
 export function loginUser(body){
     const promise = axios.post(`${URL}/sign-in`, body);
     return promise

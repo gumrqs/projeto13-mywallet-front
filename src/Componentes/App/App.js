@@ -14,9 +14,9 @@ import UserContext from "../../Contexts/UserContext.js";
 
 
 export default function App(){
-    const [user, setUser] = useState([]);
+    const [users, setUsers] = useState([]);
     return (
-        <UserContext.Provider value={{user, setUser}}>
+        <UserContext.Provider value={{users, setUsers}}>
         <BrowserRouter>
 		
 			<Routes>

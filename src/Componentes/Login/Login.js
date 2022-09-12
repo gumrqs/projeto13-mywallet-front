@@ -16,7 +16,7 @@ export default function Login(){
     const [emailUser,setEmailUser]= useState('');
     const [passwordUser,setPasswordUser]= useState('');
     const navigate = useNavigate();
-    const { user, setUser } = useContext(UserContext);
+    const { users, setUsers } = useContext(UserContext);
     const [Isloading, setIsLoading] =useState (false);
 
    
@@ -34,13 +34,11 @@ function confirmLogin(e){
     loginUser(body)
         .then((resposta) => {
             setIsLoading(false)
-            setUser(resposta.data);
+            setUsers(resposta.data);
             toast.success("Tudo certo, vamos la!");
             setTimeout(()=>{
                 navigate('/home');
             },2000) 
-            /* navigate('/home') */
-            console.log(resposta, '-----------------');
         })
         .catch((err) => {
             setIsLoading(false)

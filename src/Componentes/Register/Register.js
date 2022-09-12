@@ -1,28 +1,28 @@
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from 'axios';
 import {ThreeDots} from 'react-loader-spinner';
 import { registerUser } from "../../service/api";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Register (){
-
 
 const [email,setEmail]= useState('');
 const [password,setPassword]= useState('');
 const [name,setName]= useState('');
 const [confirmPassword, setConfirmPassword] = useState('');
 const navigate=useNavigate();
-const [loading, setLoading] =useState (false)
+const [isloading, setIsLoading] =useState (false)
 console.log("comecei ")
 
 function confirmLogin(e){
     if(confirmPassword !== password){
-         alert('Senhas são diferentes')
+         alert('Senhas são diferentes, tente novamente')
 
     }else{
     e.preventDefault();
-    setLoading(true)
+    setIsLoading(true)
 
     const body = {
         email: email,
@@ -32,13 +32,16 @@ function confirmLogin(e){
 
     registerUser(body)
         .then(() => {
-            navigate('/home')
-            console.log("TO NO then");
+            toast.success("Tudo certo, vamos la, Faça seu login :)!!");
+            setTimeout(()=>{
+                navigate('/');
+            },2000) 
         })
         .catch((err) => {
+            setIsLoading(false)
             console.error(err);
             if(err.status !== 200){
-                alert("Cadastro errado ou já existente")
+                toast.error("Email já está sendo utilizado :( - Tente outro :D")
             } 
 
         });
@@ -46,12 +49,13 @@ function confirmLogin(e){
     setEmail('');
     setName('');
     setPassword('');
-        
+    setConfirmPassword('');
 }
 }
 
     return (
         <LoginP>
+            <ToastContainer />
             <Text>
                     My Wallet
             </Text>
@@ -75,7 +79,7 @@ function confirmLogin(e){
                             />
                         </Forms>
                         <Forms>
-                            <Input type="text" onChange={(e) => setPassword(e.target.value)}
+                            <Input type="password" onChange={(e) => setPassword(e.target.value)}
                                     value={password}
                                     required
                                     placeholder='senha'
@@ -83,7 +87,7 @@ function confirmLogin(e){
                         </Forms>
 
                         <Forms>
-                            <Input type="text" onChange={(e) => setConfirmPassword(e.target.value)}
+                            <Input type="password" onChange={(e) => setConfirmPassword(e.target.value)}
                                     value={confirmPassword}
                                     required
                                     placeholder='confirme sua senha'
@@ -91,13 +95,13 @@ function confirmLogin(e){
                         </Forms>
                         
                         {
-                            loading?
+                            isloading?
                             <Button> <ThreeDots color={'white'} height={30} width={30}/></Button>
                             :
                             <Button> <p>Cadastrar</p></Button>
                         }
                     
-                        <Link to="/Home">
+                        <Link to="/">
                         <Cadastrar>Já tem uma conta? Faça login!</Cadastrar>
                         </Link>
                     

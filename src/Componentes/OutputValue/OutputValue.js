@@ -6,13 +6,16 @@ import UserContext from "../../Contexts/UserContext";
 import {ThreeDots} from 'react-loader-spinner';
 import { outputUser } from '../../service/api';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function OutputValue(){
 
 
     const [value,setValue]= useState('');
     const [description,setDescription]= useState('');
     const navigate = useNavigate();
-    const { user, setUser } = useContext(UserContext);
+    const { users, setUsers } = useContext(UserContext);
     const [Isloading, setIsLoading] =useState (false);
 
 
@@ -26,23 +29,19 @@ export default function OutputValue(){
             description: description
         }
     
-        outputUser(body,user.token)
-            .then((resposta) => {
+        outputUser(body,users.token)
+            .then(() => {
                 setIsLoading(false)
-                setUser(resposta.data);
-                console.log('to esperando a promessa')
-                /* toast.success("Tudo certo, vamos la!"); */
+                toast.success("Tudo certo, valor inserido!");
                 setTimeout(()=>{
                     navigate('/home');
-                },2000) 
-                /* navigate('/home') */
-                console.log(resposta, '-----------------');
+                },1000) 
             })
             .catch((err) => {
                 setIsLoading(false)
                 console.error(err);
                 if(err.status !== 200){
-                    /* toast.error("Login está errado, tente novamente"); */
+                    
                 } 
     
             });
@@ -57,9 +56,9 @@ export default function OutputValue(){
     return ((
             
             <LoginP>
-            {/* <ToastContainer /> */}
+            <ToastContainer />
                 <Text>
-                    Nova Entrada
+                    Nova Saída
                 </Text>
                 <Formulario>
                 <form onSubmit={confirmLogin}>
@@ -87,11 +86,6 @@ export default function OutputValue(){
                             <Button type='submit'> <p>Salvar Saída</p></Button>
                             
                          }
-                        
-                        
-                        {/* <Link to="/sign-up">
-                        <Cadastrar>Não tem uma conta? Cadastre-se!</Cadastrar>
-                        </Link> */}
                     </Dados>
                 </form>
             </Formulario>
@@ -109,8 +103,6 @@ const LoginP = styled.div`
     background-color: rgb(128,34,183);
     display:flex ;
     flex-direction: column ;
-    /* justify-content: center ;
-    align-items: center ; */
 `;
 
 const Formulario = styled.div`
